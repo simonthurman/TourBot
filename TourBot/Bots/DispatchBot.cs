@@ -17,6 +17,9 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Schema;
 
+using AdaptiveCards;
+using AdaptiveCards.Rendering;
+
 
 
 namespace TourBot.Bots
@@ -97,14 +100,17 @@ namespace TourBot.Bots
             
             string PBreply = reader.ReadToEnd();
 
+            var card = new AdaptiveCards.AdaptiveCard();
+            card.Speak = PBreply;
+
   
             if (PBreply != null && PBreply.Length >0)
             {
-                await turnContext.SendActivityAsync(MessageFactory.Text(PBreply), cancellationToken);
-                //var attachment = new Attachment();
-                //attachment.ContentType = "text/html";
-                //attachment.Content = PBreply;
-                //await turnContext.SendActivityAsync(MessageFactory.Attachment(attachment), cancellationToken);
+                //await turnContext.SendActivityAsync(MessageFactory.Text(PBreply), cancellationToken);
+                var attachment = new Attachment();
+                attachment.ContentType = "text/html";
+                attachment.Content = card;
+                await turnContext.SendActivityAsync(MessageFactory.Attachment(attachment), cancellationToken);
             }
             else
             {
